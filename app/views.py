@@ -2,15 +2,14 @@
 # import libraries
 from .models import Book,Category
 from .serializers import BookSerialser, CategorySerializer
-from rest_framework import mixins, generics
-
+from rest_framework import mixins, generics, viewsets, filters
 
 
 # CBV for add books
 class AddBook (mixins.ListModelMixin, generics.GenericAPIView,mixins.CreateModelMixin) :
     queryset = Book.objects.all()
     serializer_class = BookSerialser
-
+    
     def get(self, request) :
         return self.list(request)
 
@@ -62,3 +61,23 @@ class EditBookCBV (mixins.RetrieveModelMixin, mixins.UpdateModelMixin,mixins.Des
     
     def delete (self,request, id) :
         return self.destroy(request)
+    
+
+# CBV for using viewsets with category model
+class CategoryViewSet (viewsets.ModelViewSet) :
+    
+    # default parameters
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    # for search
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
+
+
+# CBV for using viewsets with book model 
+class BookViewSet (viewsets.ModelViewSet) :
+    
+    # default parameters
+    queryset = Book.objects.all()
+    serializer_class = BookSerialser

@@ -81,3 +81,8 @@ class BookViewSet (viewsets.ModelViewSet) :
     # default parameters
     queryset = Book.objects.all()
     serializer_class = BookSerialser
+
+
+    # for search
+    filter_backends = [filters.SearchFilter]
+    search_fileds = ['name']
